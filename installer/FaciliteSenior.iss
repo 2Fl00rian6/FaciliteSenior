@@ -101,8 +101,37 @@ begin
   Result := not IsWebView2RuntimeInstalled;
 end;
 
-procedure InitializeWizard;
+// Detecte une installation precedente de FaciliteSenior (meme AppId) via la cle de desinstallation
+// que Windows/Inno Setup maintient automatiquement, et renvoie son numero de version affiche.
+function GetPreviousVersion(var VersionText: string): Boolean;
+var
+  UninstallKey: string;
 begin
+  UninstallKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{{8B26789E-1173-4C70-B340-7F7AFD8E15B8}}_is1';
+  Result := RegQueryStringValue(HKLM, UninstallKey, 'DisplayVersion', VersionText)
+    or RegQueryStringValue(HKCU, UninstallKey, 'DisplayVersion', VersionText);
+end;
+
+procedure InitializeWizard;
+var
+  PreviousVersion: string;
+begin
+  // Meme AppId qu'avant : Inno Setup reutilise automatiquement le dossier d'installation et les
+  // options precedemment choisies (UsePreviousAppDir / UsePreviousTasks ci-dessus). Les liens et
+  // reglages personnels de l'utilisateur ne sont eux jamais stockes dans ce dossier (ils vivent
+  // dans %AppData%\FaciliteSenior, jamais touche par l'installeur) : ils sont donc deja conserves
+  // automatiquement. Ce message rend simplement cette mise a jour explicite et rassurante.
+  if GetPreviousVersion(PreviousVersion) then
+  begin
+    SuppressibleMsgBox(
+      'Une version precedente de FaciliteSenior (' + PreviousVersion + ') a ete detectee sur cet ordinateur.' + #13#10 + #13#10 +
+      'Cette installation va la mettre a jour vers la version {#AppVersion}.' + #13#10 +
+      'Les liens favoris et les reglages deja configures seront automatiquement conserves : rien a refaire.',
+      mbInformation,
+      MB_OK,
+      IDOK);
+  end;
+
 #ifndef IncludeWebView2Bootstrapper
   if not IsWebView2RuntimeInstalled then
   begin
