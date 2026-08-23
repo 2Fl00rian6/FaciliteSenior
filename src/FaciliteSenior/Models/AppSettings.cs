@@ -4,7 +4,7 @@ namespace FaciliteSenior.Models;
 
 public sealed class AppSettings
 {
-    public string ApplicationTitle { get; set; } = "Facilite";
+    public string ApplicationTitle { get; set; } = "Facilite Senior";
 
     public double InterfaceScale { get; set; } = 1.0;
 

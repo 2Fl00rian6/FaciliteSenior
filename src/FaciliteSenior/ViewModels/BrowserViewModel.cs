@@ -86,20 +86,9 @@ public sealed class BrowserViewModel : ViewModelBase
 
     public void OpenFavorite(FavoriteLink favorite)
     {
-        var url = favorite.Url.Trim();
-
-        // Si c'est deja la page ouverte (meme lien reclique), on ne recharge pas :
-        // on retrouve la page telle qu'elle etait laissee (position, formulaire en cours...),
-        // exactement comme un onglet de navigateur qu'on retrouve.
-        if (!IsErrorVisible && string.Equals(url, CurrentUrl, StringComparison.OrdinalIgnoreCase))
-        {
-            FriendlyName = favorite.Label;
-            return;
-        }
-
         FriendlyName = favorite.Label;
         PageTitle = string.Empty;
-        CurrentUrl = url;
+        CurrentUrl = favorite.Url.Trim();
         HideError();
         SetLoading(true, $"Ouverture de {favorite.Label}...");
         NavigateRequested?.Invoke(this, CurrentUrl);

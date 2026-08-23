@@ -123,6 +123,38 @@
     <Setter Property="Background" Value="{StaticResource NeutralBadgeBrush}" />
   </Style>
 
+  <!-- Bouton de la barre laterale (NavigationView façon Windows 11 : Courrier, Photos, Parametres...) -->
+  <Style x:Key="SidebarNavButtonStyle" TargetType="Button">
+    <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="14,12" />
+    <Setter Property="Margin" Value="10,3" />
+    <Setter Property="FontSize" Value="18" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="OuterBorder"
+                  Background="{TemplateBinding Background}"
+                  CornerRadius="8">
+            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Left" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="OuterBorder" Property="Background" Value="{StaticResource SurfaceAltBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+              <Setter TargetName="OuterBorder" Property="Background" Value="{StaticResource BorderBrushSoft}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
   <!-- Grandes tuiles de l'accueil / documents : carte Fluent avec legere elevation -->
   <Style x:Key="PrimaryTileButtonStyle" TargetType="Button">
     <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />

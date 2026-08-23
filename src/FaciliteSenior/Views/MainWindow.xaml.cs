@@ -1,5 +1,7 @@
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using FaciliteSenior.ViewModels;
 
@@ -7,6 +9,16 @@ namespace FaciliteSenior.Views;
 
 public partial class MainWindow : Window
 {
+    // Materiau de fond "Mica" natif de Windows 11 (le meme que les Parametres, Courrier, Photos...).
+    // Applique via DWM : sans effet (ignore silencieusement) sur une version de Windows plus ancienne.
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
+
+    private const int DwmwaWindowCornerPreference = 33;
+    private const int DwmwaSystemBackdropType = 38;
+    private const int DwmwcpRound = 2;
+    private const int DwmsbtMainWindow = 2; // Mica
+
     private bool _isForcedFullScreen;
     private DispatcherFrame? _modalFrame;
     private bool _modalResult;
@@ -17,6 +29,24 @@ public partial class MainWindow : Window
         DataContextChanged += OnDataContextChanged;
         Activated += OnWindowActivated;
         StateChanged += OnWindowStateChanged;
+        SourceInitialized += OnSourceInitialized;
+    }
+
+    private void OnSourceInitialized(object? sender, EventArgs e)
+    {
+        try
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            var backdrop = DwmsbtMainWindow;
+            DwmSetWindowAttribute(hwnd, DwmwaSystemBackdropType, ref backdrop, sizeof(int));
+            var corner = DwmwcpRound;
+            DwmSetWindowAttribute(hwnd, DwmwaWindowCornerPreference, ref corner, sizeof(int));
+        }
+        catch
+        {
+            // Windows plus ancien que 11 ou API indisponible : l'application reste fonctionnelle,
+            // simplement sans le materiau Mica.
+        }
     }
 
     /// <summary>

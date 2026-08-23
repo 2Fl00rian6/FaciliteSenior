@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,6 +29,11 @@ public partial class BrowserView : UserControl
         })();
         """;
 
+    private static readonly string DebugLogPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "FaciliteSenior",
+        "browser-debug.log");
+
     private BrowserViewModel? _viewModel;
     private bool _isInitialized;
     private bool _eventsAttached;
@@ -40,8 +45,24 @@ public partial class BrowserView : UserControl
         DataContextChanged += OnDataContextChanged;
     }
 
+    // TODO temporaire : journal de diagnostic. A retirer une fois le comportement confirme stable.
+    private static void Log(string message)
+    {
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(DebugLogPath)!);
+            File.AppendAllText(DebugLogPath, $"{DateTime.Now:HH:mm:ss.fff} {message}{Environment.NewLine}");
+        }
+        catch
+        {
+            // Le journal est un outil de diagnostic best-effort : une erreur d'ecriture ne doit
+            // jamais faire planter le navigateur integre.
+        }
+    }
+
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
+        Log("OnLoaded");
         try
         {
             await EnsureBrowserInitializedAsync();
@@ -53,6 +74,7 @@ public partial class BrowserView : UserControl
         }
         catch (Exception ex)
         {
+            Log($"OnLoaded EXCEPTION: {ex}");
             ShowInitializationError(ex);
         }
     }
@@ -85,12 +107,14 @@ public partial class BrowserView : UserControl
             return;
         }
 
+        Log("EnsureBrowserInitializedAsync: debut");
         ConfigureCreationProperties();
         await BrowserControl.EnsureCoreWebView2Async();
         ConfigureBrowser();
         await BrowserControl.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(SafetyScript);
         AttachCoreEvents();
         _isInitialized = true;
+        Log("EnsureBrowserInitializedAsync: termine");
     }
 
     private void ConfigureCreationProperties()
@@ -109,7 +133,12 @@ public partial class BrowserView : UserControl
 
         BrowserControl.CreationProperties = new CoreWebView2CreationProperties
         {
-            UserDataFolder = appDataRoot
+            UserDataFolder = appDataRoot,
+
+            // Ecran noir/gris connu de WebView2 dans WPF sur certaines configurations : on
+            // desactive l'acceleration GPU du navigateur integre pour forcer un rendu logiciel
+            // fiable (un peu moins fluide, mais s'affiche toujours).
+            AdditionalBrowserArguments = "--disable-gpu --disable-gpu-compositing"
         };
     }
 
@@ -206,6 +235,8 @@ public partial class BrowserView : UserControl
 
     private async Task NavigateToAsync(string url)
     {
+        Log($"NavigateToAsync: {url}");
+
         if (_viewModel is null || string.IsNullOrWhiteSpace(url))
         {
             return;
@@ -224,6 +255,7 @@ public partial class BrowserView : UserControl
         }
         catch (Exception ex)
         {
+            Log($"NavigateToAsync EXCEPTION: {ex}");
             ShowInitializationError(ex);
         }
     }
@@ -247,6 +279,8 @@ public partial class BrowserView : UserControl
 
     private void OnNavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
     {
+        Log($"OnNavigationCompleted: IsSuccess={e.IsSuccess} WebErrorStatus={e.WebErrorStatus}");
+
         if (_viewModel is null)
         {
             return;

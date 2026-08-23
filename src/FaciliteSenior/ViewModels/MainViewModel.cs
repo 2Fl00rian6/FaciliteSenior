@@ -1,4 +1,4 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
 using FaciliteSenior.Commands;
 using FaciliteSenior.Models;
 using FaciliteSenior.Services;
@@ -27,7 +27,7 @@ public sealed class MainViewModel : ViewModelBase
     private AppSettings _currentSettings = new();
     private ViewModelBase _currentContent;
     private ScreenKind _currentScreen = ScreenKind.Home;
-    private string _windowTitle = "Facilite";
+    private string _windowTitle = "Facilite Senior";
     private string _statusText = "Choisissez un grand bouton pour commencer.";
     private bool _isFullScreen;
     private double _interfaceScale = 1.0;
@@ -47,6 +47,8 @@ public sealed class MainViewModel : ViewModelBase
         _currentContent = HomeViewModel;
 
         ShowHomeCommand = new RelayCommand(_ => ShowHome());
+        ShowDocumentsCommand = new RelayCommand(_ => ShowDocuments());
+        ShowHelpCommand = new RelayCommand(_ => ShowHelp());
         _backCommand = new RelayCommand(_ => GoBack(), _ => CanGoBack());
         _refreshCommand = new RelayCommand(_ => BrowserViewModel.RefreshPage(), _ => _currentScreen == ScreenKind.Browser);
         _closePageCommand = new RelayCommand(_ => CloseCurrentPage(), _ => _currentScreen != ScreenKind.Home);
@@ -78,21 +80,6 @@ public sealed class MainViewModel : ViewModelBase
         get => _currentContent;
         private set => SetProperty(ref _currentContent, value);
     }
-
-    /// <summary>
-    /// Les pages sont creees une seule fois et restent en vie en arriere-plan (comme des onglets) :
-    /// on bascule leur visibilite au lieu de les recreer, pour que le navigateur integre
-    /// garde la page ouverte (position, formulaire en cours, session) meme apres etre reparti sur l'accueil.
-    /// </summary>
-    public bool IsHomeVisible => _currentScreen == ScreenKind.Home;
-
-    public bool IsBrowserVisible => _currentScreen == ScreenKind.Browser;
-
-    public bool IsDocumentsVisible => _currentScreen == ScreenKind.Documents;
-
-    public bool IsHelpVisible => _currentScreen == ScreenKind.Help;
-
-    public bool IsSettingsVisible => _currentScreen == ScreenKind.Settings;
 
     public string WindowTitle
     {
@@ -127,9 +114,22 @@ public sealed class MainViewModel : ViewModelBase
 
     public string FullScreenLabel => IsFullScreen ? "Mode fenetre" : "Plein ecran";
 
-    public string FullScreenIconGlyph => IsFullScreen ? "\uE73F" : "\uE740";
+    public string FullScreenIconGlyph => IsFullScreen ? "" : "";
 
     public ICommand ShowHomeCommand { get; }
+
+    public ICommand ShowDocumentsCommand { get; }
+
+    public ICommand ShowHelpCommand { get; }
+
+    /// <summary>Etat de selection pour la barre laterale (mise en surbrillance de l'onglet actif).</summary>
+    public bool IsHomeSelected => _currentScreen == ScreenKind.Home;
+
+    public bool IsDocumentsSelected => _currentScreen == ScreenKind.Documents;
+
+    public bool IsHelpSelected => _currentScreen == ScreenKind.Help;
+
+    public bool IsSettingsSelected => _currentScreen == ScreenKind.Settings;
 
     public ICommand BackCommand => _backCommand;
 
@@ -310,16 +310,20 @@ public sealed class MainViewModel : ViewModelBase
             _history.Push(_currentScreen);
         }
 
+        var leavingBrowser = _currentScreen == ScreenKind.Browser && target != ScreenKind.Browser;
+
         _currentScreen = target;
         CurrentContent = ResolveContent(target);
 
-        // La page du navigateur integre n'est plus effacee en quittant l'ecran : comme un vrai
-        // navigateur, elle reste ouverte en arriere-plan et on la retrouve telle quelle au retour.
-        OnPropertyChanged(nameof(IsHomeVisible));
-        OnPropertyChanged(nameof(IsBrowserVisible));
-        OnPropertyChanged(nameof(IsDocumentsVisible));
-        OnPropertyChanged(nameof(IsHelpVisible));
-        OnPropertyChanged(nameof(IsSettingsVisible));
+        if (leavingBrowser)
+        {
+            BrowserViewModel.ClearPage();
+        }
+
+        OnPropertyChanged(nameof(IsHomeSelected));
+        OnPropertyChanged(nameof(IsDocumentsSelected));
+        OnPropertyChanged(nameof(IsHelpSelected));
+        OnPropertyChanged(nameof(IsSettingsSelected));
 
         UpdateStatusForCurrentScreen();
         UpdateCommandStates();
@@ -376,4 +380,3 @@ public sealed class MainViewModel : ViewModelBase
         }
     }
 }
-

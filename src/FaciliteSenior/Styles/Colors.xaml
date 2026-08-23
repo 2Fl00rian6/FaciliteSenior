@@ -55,10 +55,4 @@
   <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}" />
   <SolidColorBrush x:Key="HelpBrush" Color="{StaticResource HelpColor}" />
   <SolidColorBrush x:Key="NeutralBadgeBrush" Color="{StaticResource NeutralBadgeColor}" />
-
-  <LinearGradientBrush x:Key="WindowMicaBrush" StartPoint="0,0" EndPoint="1,1">
-    <GradientStop Color="#FFF7F7FA" Offset="0" />
-    <GradientStop Color="#FFEDEEF3" Offset="0.55" />
-    <GradientStop Color="#FFE7EAF2" Offset="1" />
-  </LinearGradientBrush>
 </ResourceDictionary>
