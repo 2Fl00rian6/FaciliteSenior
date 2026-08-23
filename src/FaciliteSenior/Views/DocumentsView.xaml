@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="FaciliteSenior.Views.DocumentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Border Style="{StaticResource CardBorderStyle}">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0"
+                 Style="{StaticResource PageTitleTextStyle}"
+                 Text="Documents importants" />
+
+      <TextBlock Grid.Row="1"
+                 Margin="0,12,0,20"
+                 Style="{StaticResource BodyTextStyle}"
+                 Text="{Binding EmptyMessage}" />
+
+      <Grid Grid.Row="2">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Visibility="{Binding HasLinks, Converter={StaticResource BooleanToVisibilityConverter}}">
+          <ItemsControl ItemsSource="{Binding Links}" HorizontalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Command="{Binding Command}"
+                        Style="{StaticResource PrimaryTileButtonStyle}"
+                        Width="{Binding DataContext.TileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        MinHeight="{Binding DataContext.TileMinHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Padding="{Binding DataContext.TilePadding, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Margin="{Binding DataContext.TileMargin, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                  <StackPanel>
+                    <Border Style="{StaticResource IconBadgeStyle}"
+                            Background="{StaticResource InfoBrush}"
+                            HorizontalAlignment="Center"
+                            Visibility="{Binding DataContext.ShowCardIcons, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                                 FontSize="{Binding DataContext.IconFontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                 Foreground="White"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding IconGlyph}" />
+                    </Border>
+                    <TextBlock Margin="0,14,0,6"
+                               HorizontalAlignment="Center"
+                               FontSize="{Binding DataContext.LabelFontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               FontWeight="SemiBold"
+                               Text="{Binding Label}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Visibility="{Binding DataContext.ShowCardLabels, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Style="{StaticResource BodyTextStyle}"
+                               FontSize="{Binding DataContext.DescriptionFontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               Text="{Binding Description}"
+                               TextAlignment="Center"
+                               Visibility="{Binding DataContext.ShowCardDescriptions, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                  </StackPanel>
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+
+        <Border Style="{StaticResource SectionCardBorderStyle}"
+                Visibility="{Binding HasLinks, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+          <TextBlock VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     Style="{StaticResource BodyTextStyle}"
+                     Text="Aucun lien n'est disponible pour le moment." />
+        </Border>
+      </Grid>
+    </Grid>
+  </Border>
+</UserControl>

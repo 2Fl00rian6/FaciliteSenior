@@ -1,0 +1,171 @@
+﻿<Window x:Class="FaciliteSenior.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:FaciliteSenior.Views"
+        Title="{Binding WindowTitle}"
+        Width="1280"
+        Height="860"
+        WindowStartupLocation="CenterScreen">
+  <Grid Background="{DynamicResource WindowMicaBrush}">
+    <Grid.LayoutTransform>
+      <ScaleTransform ScaleX="{Binding InterfaceScale}" ScaleY="{Binding InterfaceScale}" />
+    </Grid.LayoutTransform>
+
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Border Grid.Row="0"
+            Margin="16,16,16,0"
+            Padding="18,14"
+            Background="{DynamicResource SurfaceBrush}"
+            BorderBrush="{DynamicResource BorderBrushSoft}"
+            BorderThickness="1"
+            CornerRadius="14"
+            Effect="{StaticResource CardShadowEffect}">
+      <DockPanel LastChildFill="False">
+        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+          <Border Width="34" Height="34" CornerRadius="8" Background="{DynamicResource AccentBrush}">
+            <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                       FontSize="18"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="&#xE80F;" />
+          </Border>
+          <TextBlock VerticalAlignment="Center"
+                     Margin="12,0,0,0"
+                     FontSize="21"
+                     FontWeight="SemiBold"
+                     Foreground="{DynamicResource PrimaryTextBrush}"
+                     Text="{Binding WindowTitle}" />
+        </StackPanel>
+
+        <WrapPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+          <Button Command="{Binding ShowHomeCommand}" Style="{StaticResource NavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="19" Text="&#xE80F;" />
+              <TextBlock Margin="10,0,0,0" Text="Accueil" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding BackCommand}" Style="{StaticResource NavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="19" Text="&#xE72B;" />
+              <TextBlock Margin="10,0,0,0" Text="Retour" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding RefreshCommand}" Style="{StaticResource NavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="19" Text="&#xE72C;" />
+              <TextBlock Margin="10,0,0,0" Text="Actualiser" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding ClosePageCommand}" Style="{StaticResource NavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="19" Text="&#xE711;" />
+              <TextBlock Margin="10,0,0,0" Text="Fermer la page" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+        </WrapPanel>
+
+        <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+          <Button Command="{Binding ExitCommand}" Style="{StaticResource SecondaryNavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="18" Text="&#xE8BB;" />
+              <TextBlock Margin="9,0,0,0" Text="Fermer" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding OpenSettingsCommand}" Style="{StaticResource SecondaryNavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="18" Text="&#xE713;" />
+              <TextBlock Margin="9,0,0,0" Text="Parametres aidant" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding ToggleFullScreenCommand}" Style="{StaticResource SecondaryNavigationButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="18" Text="{Binding FullScreenIconGlyph}" />
+              <TextBlock Margin="9,0,0,0" Text="{Binding FullScreenLabel}" TextWrapping="Wrap" />
+            </StackPanel>
+          </Button>
+
+          <Border Width="1" Height="28" Margin="6,0" Background="{DynamicResource BorderBrushSoft}" />
+        </WrapPanel>
+      </DockPanel>
+    </Border>
+
+    <!-- Chaque page est creee une seule fois et reste vivante en arriere-plan : on bascule sa
+         visibilite au lieu de la recreer a chaque navigation. C'est ce qui permet au navigateur
+         integre de garder une page ouverte (session, formulaire en cours, position) meme apres
+         etre reparti sur l'accueil, comme un vrai onglet de navigateur. -->
+    <Grid Grid.Row="1" Margin="16,12,16,16">
+      <views:HomeView DataContext="{Binding HomeViewModel}"
+                       Visibility="{Binding IsHomeVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+      <views:BrowserView DataContext="{Binding BrowserViewModel}"
+                          Visibility="{Binding IsBrowserVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+      <views:DocumentsView DataContext="{Binding DocumentsViewModel}"
+                            Visibility="{Binding IsDocumentsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+      <views:HelpView DataContext="{Binding HelpViewModel}"
+                      Visibility="{Binding IsHelpVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+      <views:SettingsView DataContext="{Binding SettingsViewModel}"
+                           Visibility="{Binding IsSettingsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+
+    <!-- Fenetre modale "maison" : un voile + une carte au centre de la MEME fenetre, au lieu
+         d'ouvrir une vraie fenetre Windows separee. Sert pour les confirmations, les messages
+         et le code d'acces aidant. -->
+    <Grid x:Name="ModalOverlay"
+          Grid.RowSpan="2"
+          Background="#99000000"
+          Visibility="Collapsed"
+          Panel.ZIndex="1000"
+          PreviewKeyDown="OnModalOverlayPreviewKeyDown">
+      <Border MaxWidth="560"
+              MinWidth="420"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Padding="30"
+              Background="{DynamicResource SurfaceBrush}"
+              BorderBrush="{DynamicResource BorderBrushSoft}"
+              BorderThickness="1"
+              CornerRadius="14"
+              Effect="{StaticResource CardShadowEffect}">
+        <StackPanel>
+          <TextBlock x:Name="ModalTitleText" Style="{StaticResource SectionTitleTextStyle}" />
+          <TextBlock x:Name="ModalMessageText"
+                     Margin="0,16,0,4"
+                     Style="{StaticResource BodyTextStyle}"
+                     FontSize="20" />
+
+          <StackPanel x:Name="ModalCodePanel" Margin="0,14,0,0" Visibility="Collapsed">
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Code" />
+            <PasswordBox x:Name="ModalCodeBox"
+                         Margin="0,8,0,0"
+                         Padding="14,10"
+                         FontSize="22"
+                         BorderThickness="1"
+                         BorderBrush="{DynamicResource BorderBrushStrong}" />
+          </StackPanel>
+
+          <StackPanel Margin="0,24,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="ModalCancelButton" Click="OnModalCancelClick" Style="{StaticResource NavigationButtonStyle}">
+              <TextBlock x:Name="ModalCancelText" />
+            </Button>
+            <Button x:Name="ModalConfirmButton" Click="OnModalConfirmClick" Style="{StaticResource PrimaryActionButtonStyle}">
+              <TextBlock x:Name="ModalConfirmText" />
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>

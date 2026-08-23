@@ -1,0 +1,167 @@
+﻿<UserControl x:Class="FaciliteSenior.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Border Style="{StaticResource CardBorderStyle}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <StackPanel>
+        <TextBlock Style="{StaticResource PageTitleTextStyle}" Text="Parametres aidant" />
+        <TextBlock Margin="0,12,0,24"
+                   Style="{StaticResource BodyTextStyle}"
+                   Text="Cette page permet de regler les liens, les tailles d'affichage, les cartes et le comportement sur petit ecran." />
+
+        <Border Style="{StaticResource SectionCardBorderStyle}" Margin="0,0,0,18">
+          <StackPanel>
+            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Reglages generaux" />
+
+            <TextBlock Margin="0,18,0,0" Style="{StaticResource FieldLabelStyle}" Text="Titre de l'application" />
+            <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding ApplicationTitle, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Taille generale de l'interface" />
+            <StackPanel Margin="0,6,0,12">
+              <Slider Minimum="0.7"
+                      Maximum="1.6"
+                      TickFrequency="0.1"
+                      IsSnapToTickEnabled="True"
+                      Value="{Binding InterfaceScale}" />
+              <TextBlock Margin="0,8,0,0"
+                         Style="{StaticResource BodyTextStyle}"
+                         Text="{Binding InterfaceScaleDisplay}" />
+            </StackPanel>
+
+            <CheckBox Content="Demarrer directement en plein ecran"
+                      IsChecked="{Binding FullScreenOnStartup}" />
+
+            <CheckBox Content="Ouvrir automatiquement avec Windows"
+                      IsChecked="{Binding StartWithWindows}" />
+
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Code d'acces aidant (laisser vide pour desactiver)" />
+            <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding HelperAccessCode, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Style="{StaticResource BodyTextStyle}"
+                       FontSize="16"
+                       Text="{Binding ConfigPath}" />
+          </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource SectionCardBorderStyle}" Margin="0,0,0,18">
+          <StackPanel>
+            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Affichage des cartes" />
+            <TextBlock Margin="0,12,0,18"
+                       Style="{StaticResource BodyTextStyle}"
+                       Text="Ces reglages s'appliquent aux cartes de l'accueil et de la page Documents. Sur un tout petit ecran, la grille passe automatiquement sur une ou deux colonnes." />
+
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Taille des cartes" />
+            <StackPanel Margin="0,6,0,12">
+              <Slider Minimum="0.7"
+                      Maximum="1.5"
+                      TickFrequency="0.1"
+                      IsSnapToTickEnabled="True"
+                      Value="{Binding CardScale}" />
+              <TextBlock Margin="0,8,0,0"
+                         Style="{StaticResource BodyTextStyle}"
+                         Text="{Binding CardScaleDisplay}" />
+            </StackPanel>
+
+            <CheckBox Content="Afficher les icones sur les cartes"
+                      IsChecked="{Binding ShowCardIcons}" />
+            <CheckBox Content="Afficher les titres sur les cartes"
+                      IsChecked="{Binding ShowCardLabels}" />
+            <CheckBox Content="Afficher les descriptions sur les cartes"
+                      IsChecked="{Binding ShowCardDescriptions}" />
+          </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource SectionCardBorderStyle}" Margin="0,0,0,18">
+          <StackPanel>
+            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Aide / Assistance" />
+
+            <TextBlock Margin="0,18,0,0" Style="{StaticResource FieldLabelStyle}" Text="Titre" />
+            <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding HelpTitle, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Message simple" />
+            <TextBox Style="{StaticResource InputTextBoxStyle}"
+                     MinHeight="110"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Text="{Binding HelpMessage, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Nom de la personne a appeler" />
+            <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding HelperName, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Numero de telephone" />
+            <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
+          </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource SectionCardBorderStyle}">
+          <StackPanel>
+            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Liens favoris" />
+            <TextBlock Margin="0,12,0,18"
+                       Style="{StaticResource BodyTextStyle}"
+                       Text="Les liens coches 'Sur l'accueil' deviennent des cartes sur l'ecran principal." />
+
+            <ItemsControl ItemsSource="{Binding Favorites}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Margin="0,0,0,18"
+                          Padding="18"
+                          Background="{DynamicResource SurfaceAltBrush}"
+                          BorderBrush="{DynamicResource BorderBrushSoft}"
+                          BorderThickness="1"
+                          CornerRadius="10">
+                    <StackPanel>
+                      <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Libelle du bouton" />
+                      <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" />
+
+                      <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Description" />
+                      <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+
+                      <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Adresse web" />
+                      <TextBox Style="{StaticResource InputTextBoxStyle}" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
+
+                      <CheckBox Content="Sur l'accueil"
+                                IsChecked="{Binding ShowOnHome}" />
+                      <CheckBox Content="Dans Documents importants"
+                                IsChecked="{Binding ShowInDocuments}" />
+                      <CheckBox Content="Demander confirmation avant l'ouverture"
+                                IsChecked="{Binding ConfirmBeforeOpen}" />
+
+                      <Button HorizontalAlignment="Left"
+                              Command="{Binding RemoveCommand}"
+                              Style="{StaticResource SecondaryNavigationButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                          <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE74D;" />
+                          <TextBlock Margin="8,0,0,0" Text="Supprimer ce lien" />
+                        </StackPanel>
+                      </Button>
+                    </StackPanel>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding AddFavoriteCommand}"
+                    Style="{StaticResource NavigationButtonStyle}">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE710;" />
+                <TextBlock Margin="8,0,0,0" Text="Ajouter un lien" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </Border>
+
+        <WrapPanel Margin="0,24,0,0" HorizontalAlignment="Right">
+          <Button Command="{Binding CancelCommand}" Style="{StaticResource NavigationButtonStyle}">
+            <TextBlock Text="Annuler" />
+          </Button>
+
+          <Button Command="{Binding SaveCommand}" Style="{StaticResource PrimaryActionButtonStyle}">
+            <TextBlock Text="Enregistrer" />
+          </Button>
+        </WrapPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </Border>
+</UserControl>

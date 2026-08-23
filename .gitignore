@@ -1,0 +1,17 @@
+# Sorties de build .NET
+bin/
+obj/
+
+# Binaires publies / installeurs generes (trop volumineux pour le depot,
+# regenerez-les avec `dotnet publish` et le script installer/Build-Setup.ps1)
+artifacts/
+
+# Fichiers utilisateur Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# Config utilisateur locale (contient le code d'acces aidant et les liens personnalises,
+# ne doit pas etre versionnee - voir Services/ConfigService.cs pour son emplacement reel)
+appsettings.local.json

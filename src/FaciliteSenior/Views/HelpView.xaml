@@ -1,0 +1,58 @@
+<UserControl x:Class="FaciliteSenior.Views.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Border Style="{StaticResource CardBorderStyle}">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0"
+                 Style="{StaticResource PageTitleTextStyle}"
+                 Text="{Binding Title}" />
+
+      <TextBlock Grid.Row="1"
+                 Margin="0,18,0,24"
+                 Style="{StaticResource BodyTextStyle}"
+                 FontSize="24"
+                 Text="{Binding Message}" />
+
+      <Border Grid.Row="2"
+              Style="{StaticResource SectionCardBorderStyle}"
+              Padding="28"
+              VerticalAlignment="Top">
+        <StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <Border Style="{StaticResource IconBadgeStyle}" Background="{StaticResource HelpBrush}">
+              <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                         FontSize="28"
+                         Foreground="White"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Text="&#xE717;" />
+            </Border>
+            <TextBlock Margin="16,0,0,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource SectionTitleTextStyle}"
+                       Text="Numero utile" />
+          </StackPanel>
+
+          <TextBlock Margin="0,22,0,8"
+                     FontSize="26"
+                     FontWeight="SemiBold"
+                     Text="{Binding HelperName}" />
+          <TextBlock FontSize="34"
+                     FontWeight="Bold"
+                     Foreground="{StaticResource HelpBrush}"
+                     Text="{Binding PhoneNumber}" />
+          <TextBlock Margin="0,18,0,0"
+                     Style="{StaticResource BodyTextStyle}"
+                     FontSize="20"
+                     Text="{Binding CallSummary}" />
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Border>
+</UserControl>
