@@ -5,9 +5,9 @@ namespace FaciliteSenior.ViewModels;
 public sealed class HelpViewModel : ViewModelBase
 {
     private string _title = "Besoin d'aide ?";
-    private string _message = "En cas de probleme, appelle Florian.";
-    private string _helperName = "Florian";
-    private string _phoneNumber = "06 00 00 00 00";
+    private string _message = "En cas de probleme, appelle ton aidant.";
+    private string _helperName = "Votre aidant";
+    private string _phoneNumber = "00 00 00 00 00";
 
     public string Title
     {

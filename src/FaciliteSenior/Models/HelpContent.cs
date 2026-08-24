@@ -4,9 +4,9 @@ public sealed class HelpContent
 {
     public string Title { get; set; } = "Besoin d'aide ?";
 
-    public string Message { get; set; } = "En cas de probleme, appelle Florian.";
+    public string Message { get; set; } = "En cas de probleme, appelle ton aidant.";
 
-    public string HelperName { get; set; } = "Florian";
+    public string HelperName { get; set; } = "Votre aidant";
 
-    public string PhoneNumber { get; set; } = "06 00 00 00 00";
+    public string PhoneNumber { get; set; } = "00 00 00 00 00";
 }

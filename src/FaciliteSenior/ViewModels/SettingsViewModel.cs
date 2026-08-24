@@ -18,8 +18,8 @@ public sealed class SettingsViewModel : ViewModelBase
     private string _helperAccessCode = string.Empty;
     private string _helpTitle = "Besoin d'aide ?";
     private string _helpMessage = string.Empty;
-    private string _helperName = "Florian";
-    private string _phoneNumber = "06 00 00 00 00";
+    private string _helperName = "Votre aidant";
+    private string _phoneNumber = "00 00 00 00 00";
     private string _configPath = string.Empty;
 
     public SettingsViewModel()
@@ -227,9 +227,9 @@ public sealed class SettingsViewModel : ViewModelBase
             Help = new HelpContent
             {
                 Title = string.IsNullOrWhiteSpace(HelpTitle) ? "Besoin d'aide ?" : HelpTitle.Trim(),
-                Message = string.IsNullOrWhiteSpace(HelpMessage) ? "En cas de probleme, appelle Florian." : HelpMessage.Trim(),
-                HelperName = string.IsNullOrWhiteSpace(HelperName) ? "Florian" : HelperName.Trim(),
-                PhoneNumber = string.IsNullOrWhiteSpace(PhoneNumber) ? "06 00 00 00 00" : PhoneNumber.Trim()
+                Message = string.IsNullOrWhiteSpace(HelpMessage) ? "En cas de probleme, appelle ton aidant." : HelpMessage.Trim(),
+                HelperName = string.IsNullOrWhiteSpace(HelperName) ? "Votre aidant" : HelperName.Trim(),
+                PhoneNumber = string.IsNullOrWhiteSpace(PhoneNumber) ? "00 00 00 00 00" : PhoneNumber.Trim()
             },
             Favorites = favorites
         };

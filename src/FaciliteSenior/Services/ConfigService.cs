@@ -106,10 +106,10 @@ public sealed class ConfigService : IConfigService
         settings.Help ??= new HelpContent();
         settings.Help.Title = string.IsNullOrWhiteSpace(settings.Help.Title) ? "Besoin d'aide ?" : settings.Help.Title.Trim();
         settings.Help.Message = string.IsNullOrWhiteSpace(settings.Help.Message)
-            ? "En cas de probleme, appelle Florian."
+            ? "En cas de probleme, appelle ton aidant."
             : settings.Help.Message.Trim();
-        settings.Help.HelperName = string.IsNullOrWhiteSpace(settings.Help.HelperName) ? "Florian" : settings.Help.HelperName.Trim();
-        settings.Help.PhoneNumber = string.IsNullOrWhiteSpace(settings.Help.PhoneNumber) ? "06 00 00 00 00" : settings.Help.PhoneNumber.Trim();
+        settings.Help.HelperName = string.IsNullOrWhiteSpace(settings.Help.HelperName) ? "Votre aidant" : settings.Help.HelperName.Trim();
+        settings.Help.PhoneNumber = string.IsNullOrWhiteSpace(settings.Help.PhoneNumber) ? "00 00 00 00 00" : settings.Help.PhoneNumber.Trim();
 
         settings.Favorites ??= new List<FavoriteLink>();
 
